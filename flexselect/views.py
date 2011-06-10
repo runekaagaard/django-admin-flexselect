@@ -2,11 +2,13 @@ import json
 
 from django.http import HttpResponse
 from django.forms.widgets import Select
+from django.contrib.auth.decorators import login_required
 
 from flexselect import (FlexSelectWidget, choices_from_queryset, 
                         choices_from_instance, details_from_instance,
                         instance_from_request)
 
+@login_required
 def update(request):
     """
     Ajax callback called when on of the trigger fields is changed. Returns
