@@ -1,7 +1,8 @@
 ## About Django Admin FlexSelect ##
 
 FlexSelect is a little reusable app for the Django Admin that makes it trivial
-to have foreign key fields depend on each other. The developer can by writing a simple configuration class filter the choices for the field based on values of  
+to have foreign key fields depend on each other. The developer can by writing a 
+simple configuration class filter the choices for the field based on values of  
 other fields and append html with additional content as well.
 
 ## Installation ##
@@ -26,6 +27,7 @@ git clone git@github.com:runekaagaard/django-admin-flexselect.git
    changed. Get it at http://jqueryui.com/download.
 
 7) Add the "flexselect/media/flexselect/js/flexselect.js" script to your site.
+   it must be included after RelatedObjectLookups.js.
 
 ## Usage ##
 
