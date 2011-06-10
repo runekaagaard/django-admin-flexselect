@@ -23,4 +23,3 @@ def update(request):
         'options' : Select(choices=choices).render_options([], []),
         'details': details_from_instance(instance, renderer),
         }), mimetype='application/json')
-    

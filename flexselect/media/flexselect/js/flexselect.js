@@ -58,6 +58,10 @@ flexselect.triggered = function(event) {
 		success: function(data) {
 			$(this).html(data.options);
 			$(this).parent().find('span.flexselect_details').html(data.details);
+			if (typeof $.ui !== 'undefined') {
+				$(this).parent().css('background-color', '#F49207')
+					            .animate({ backgroundColor: "white" }, 5000);
+			}
 	    },
 	    error: function(data) {
 	    	alert("Something went wrong with flexselect.");
