@@ -21,7 +21,7 @@ git clone git@github.com:runekaagaard/django-admin-flexselect.git
 
 6) Add the JQuery plugin http://jquery.malsup.com/form/ to your site.
 
-7) Optionally JqueryUI can be added. If it is, the background color of dependent
+7) Optionally Jquery UI can be added. If it is, the background color of dependent
    fields will fade from orange to white when one of their trigger fields are
    changed. Get it at http://jqueryui.com/download.
 
