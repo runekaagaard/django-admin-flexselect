@@ -15,11 +15,13 @@ git clone git@github.com:runekaagaard/django-admin-flexselect.git
 
 3) Add "flexselect" to `INSTALLED_APPS` in "settings.py".
 
-4) Make sure there is a JQuery installed that gives access to the `$` variable.
+4) Add `(r'^flexselect/', include('flexselect.urls')),` to your "urls.py".
 
-5) Add the JQuery plugin http://jquery.malsup.com/form/ to your site.
+5) Make sure there is a JQuery installed that gives access to the `$` variable.
 
-6) Add the "flexselect/media/flexselect/js/flexselect.js" script to your site.
+6) Add the JQuery plugin http://jquery.malsup.com/form/ to your site.
+
+7) Add the "flexselect/media/flexselect/js/flexselect.js" script to your site.
 
 ## Usage ##
 
