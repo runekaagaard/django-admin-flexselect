@@ -57,9 +57,8 @@ flexselect.bind_events = function() {
  */
 flexselect.triggered = function(event) {
 	$.ajax({
-		url: '/flexselect/update?' + $('form').formSerialize(),
-		data: $('form').formSerialize() + '&hashed_name=' 
-		                                + event.data.hashed_name,
+		url: '/flexselect/update',
+		data: $('form').serialize() + '&hashed_name=' + event.data.hashed_name,
 		type: 'post',
 		context: flexselect.get_element(event.data.field_to_update),
 		success: function(data) {

@@ -112,6 +112,9 @@ class FlexSelectWidget(Select):
     instances = {}
     """ Instances of renderers with their hashed names as keys."""
     
+    class Media:
+        js = ('flexselect/js/flexselect.js', )
+        
     def __init__(self, renderer, db_field, modeladmin, request, *args, 
                  **kwargs):
         self.renderer = renderer
