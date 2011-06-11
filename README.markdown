@@ -43,9 +43,6 @@ class CustomerContactRenderer(object):
     triggers = ['client']
     text_on_invalid = 'Please update the client field first'
     
-    def details(self, instance):
-        return "<div>" + force_unicode(instance.client) + "</div>"
-    
     def queryset(self, instance):
         customer = instance.client.department.customer
         return CustomerContact.objects.filter(customer=customer)

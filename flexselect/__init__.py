@@ -117,6 +117,9 @@ class FlexSelectWidget(Select):
         
     def __init__(self, renderer, db_field, modeladmin, request, *args, 
                  **kwargs):
+        if not getattr(renderer, 'details', False):
+            renderer.details = lambda instance: u''
+            
         self.renderer = renderer
         renderer.model = db_field.model
         renderer.form_field = db_field.name

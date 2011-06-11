@@ -19,10 +19,6 @@ class CompanyContactPersonRenderer(object):
     triggers = ['client']
     text_on_invalid = 'Please update the client field first'
 
-    def details(self, instance):
-        return ""
-        return "<div>" + force_unicode(instance.company_contact_person.email) + "</div>"
-
     def queryset(self, instance):
         return CompanyContactPerson.objects.filter(company=instance.client.company)
     
