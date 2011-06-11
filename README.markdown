@@ -8,7 +8,7 @@ other fields and append html with additional content as well.
 ## Installation ##
 1. Clone the source
 
-    git clone git@github.com:runekaagaard/django-admin-flexselect.git
+    `git clone git@github.com:runekaagaard/django-admin-flexselect.git`
 
 1. Copy or symlink the "flexselect" folder to your Django project.
 
