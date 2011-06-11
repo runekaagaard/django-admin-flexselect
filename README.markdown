@@ -3,7 +3,7 @@
 FlexSelect is a little reusable app for the Django Admin that makes it trivial
 to have foreign key fields depend on each other. The developer can by writing a 
 simple configuration class filter the choices for the field based on values of  
-other fields and append html with additional content as well.
+other fields.
 
 ## Installation ##
 1. Clone the source
