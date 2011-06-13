@@ -94,8 +94,8 @@ flexselect.move_after_plussign = function() {
 };
 
 /**
- * Overrides the original dismissAddAnotherPopup and trigger_fields a change event
- * on field after the popup has been added.
+ * Overrides the original dismissAddAnotherPopup and triggers a change event on
+ * the field after the popup has been added.
  */
 var _dismissAddAnotherPopup = dismissAddAnotherPopup;
 
