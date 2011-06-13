@@ -6,6 +6,8 @@ additional content of one field dynamically updates when another is changed.
 
 ## Usage example ##
 
+See the video at http://www.youtube.com/watch?v=Kp70egmDaFQ.
+
 In the following we will define a Case model with two foreign key fields, the
 so called "base field" `client` and the so called "trigger field" 
 `company_contact_person`. When we change the client on the Case change view the
