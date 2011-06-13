@@ -42,7 +42,7 @@ def choices_from_instance(instance, widget):
     try:
         for trigger_field in widget.trigger_fields:
             getattr(instance, trigger_field)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, AttributeError):
         return [('', widget.empty_choices_text(instance))]
     
     return choices_from_queryset(widget.queryset(instance))
@@ -60,7 +60,7 @@ def details_from_instance(instance, widget):
         for trigger_field in widget.trigger_fields:
             getattr(instance, trigger_field)
         related_instance = getattr(instance, widget.base_field.name)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, AttributeError):
         return u''
     return widget.details(related_instance, instance)
 
