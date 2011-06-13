@@ -7,6 +7,7 @@ var flexselect = flexselect || {};
  * Binds base- and trigger fields.
  */
 flexselect.bind_events = function() {
+    if (typeof that.flexselect === 'undefined') return;
     var fields = that.flexselect.fields;
     for (hashed_name in fields) {
     	field = fields[hashed_name];
