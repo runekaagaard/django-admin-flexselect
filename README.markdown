@@ -1,45 +1,15 @@
 ## About Django Admin FlexSelect ##
 
-FlexSelect is a little reusable app for the Django Admin that makes it trivial
-to have foreign key fields depend on each other. The developer can by writing a 
-simple configuration class filter the choices for the field based on values of  
-other fields.
+FlexSelect is a small app for the Django Admin that makes it trivial to have
+foreign keys depend on each other. By depend I mean that the choices and
+additional content of one field dynamically updates when another is changed.
 
-## Installation ##
-### Get it ###
-First clone the source:
-    
-    git clone git@github.com:runekaagaard/django-admin-flexselect.git
+## Usage example ##
 
-Then copy or symlink the "flexselect" folder to your Django project.
-
-### Configuration ###
-
-1. Add `"flexselect",` to `INSTALLED_APPS` in "settings.py".
-
-1. Add `(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
-
-### Options ###
-As of yet, flexselect only have one configuration option, namely 
-"include_jquery" that if set to true will include jQuery and jQueryUI from 
-the google ajax CDN. It defaults to false and the entire FLEXSELECT dict can
-be omitted.
-
-```python
-# Flexselect settings.
-FLEXSELECT = {
-    'include_jquery': True,
-}
-```
-
-### Static files ###
-FlexSelect requires "django.contrib.staticfiles" installed to work 
-out of the box. If it is not then "jQuery", "jQueryUI" and 
-"flexselect/static/flexselect/js/flexselect.js" must be included using other
-means. Read more about "django.contrib.staticfiles" at 
-https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/ .
-
-## Usage ##
+In the following we will define a Case model with two foreign key fields, the
+so called "base field" `client and the so called "trigger field" 
+`company_contact_person`. When we update the client on the Case change view we
+want to update the company_contact_person accordingly.
 
 In "models.py":
 
@@ -101,7 +71,7 @@ class CompanyContactPersonWidget(FlexSelectWidget):
         """
         HTML appended to the base_field.
         
-        - related_instance: An instance of the base_field.
+        - base_field_instance: An instance of the base_field.
         - instance: A partial instance of the parent model loaded from the
                     request.
                     
@@ -169,3 +139,38 @@ admin.site.register(Client, ClientAdmin)
 admin.site.register(CompanyContactPerson, CompanyContactPersonAdmin)
 admin.site.register(Company, CompanyAdmin)
 ```
+
+## Installation ##
+### Get it ###
+First clone the source:
+    
+    git clone git@github.com:runekaagaard/django-admin-flexselect.git
+
+Then copy or symlink the "flexselect" folder to your Django project.
+
+### Configuration ###
+
+1. Add `"flexselect",` to `INSTALLED_APPS` in "settings.py".
+
+1. Add `(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
+
+### Options ###
+As of yet, flexselect only have one configuration option, namely 
+"include_jquery" that if set to true will include jQuery and jQueryUI from 
+the google ajax CDN. It defaults to false and the entire FLEXSELECT dict can
+be omitted.
+
+```python
+# Flexselect settings.
+FLEXSELECT = {
+    'include_jquery': True,
+}
+```
+
+### Static files ###
+FlexSelect requires "django.contrib.staticfiles" installed to work 
+out of the box. If it is not then "jQuery", "jQueryUI" and 
+"flexselect/static/flexselect/js/flexselect.js" must be included using other
+means. Read more about "django.contrib.staticfiles" at 
+https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/ .
+
