@@ -32,15 +32,15 @@ def choices_from_queryset(queryset):
 def choices_from_instance(instance, widget):
     """
     Builds choices from a model instance using the widgets queryset() method. 
-    If any of the widgets trigger fields is not defined on the instance or the
+    If any of the widgets trigger_field fields is not defined on the instance or the
     instance itself is None, None is returned.
     
     instance: An instance of the model used on the current admin page.
     widget: A widget instance given to the FlexSelectWidget.
     """
     try:
-        for trigger in widget.triggers:
-            getattr(instance, trigger)
+        for trigger_field in widget.trigger_fields:
+            getattr(instance, trigger_field)
     except ObjectDoesNotExist:
         return [('', widget.empty_choices_text(instance))]
     
@@ -49,16 +49,16 @@ def choices_from_instance(instance, widget):
 def details_from_instance(instance, widget):
     """
     Builds html from a model instance using the widgets details() method. If
-    any of the widgets trigger fields is not defined on the instance or the
+    any of the widgets trigger_field fields is not defined on the instance or the
     instance itself is None, None is returned.
     
     instance: An instance of the model used on the current admin page.
     widget: A widget instance given to the FlexSelectWidget.
     """
     try:
-        for trigger in widget.triggers:
-            getattr(instance, trigger)
-        related_instance = getattr(instance, widget.db_field.name)
+        for trigger_field in widget.trigger_fields:
+            getattr(instance, trigger_field)
+        related_instance = getattr(instance, widget.base_field.name)
     except ObjectDoesNotExist:
         return u''
     return widget.details(related_instance, instance)
@@ -70,7 +70,7 @@ def instance_from_request(request, widget):
         """
         items = dict(request.POST.items())
         values = {}
-        for f in widget.db_field.model._meta.fields:
+        for f in widget.base_field.model._meta.fields:
             if f.name in items:
                 try:
                     value = f.formfield().to_python(items[f.name])
@@ -78,7 +78,7 @@ def instance_from_request(request, widget):
                         values[f.name] = value
                 except ValidationError:
                     pass
-        return widget.db_field.model(**values)
+        return widget.base_field.model(**values)
     
 class FlexSelectWidget(Select):
     """
@@ -93,7 +93,7 @@ class FlexSelectWidget(Select):
         # First a widget class for the field that should update when other
         # fields change must be defined.
         class CustomerContactRenderer(object):
-            triggers = ['client']
+            trigger_fields = ['client']
             empty_choices_text = 'Please update the client field first'
             
             def details(self, instance):
@@ -105,16 +105,16 @@ class FlexSelectWidget(Select):
                 
         # Then the formfield_for_foreignkey() method of the ModelAdmin must be
         # overwritten. 
-        def formfield_for_foreignkey(self, db_field, request, **kwargs):
-            if db_field.name == "customer_contact":
+        def formfield_for_foreignkey(self, base_field, request, **kwargs):
+            if base_field.name == "customer_contact":
                 kwargs['widget'] =  FlexSelectWidget(
                     # An instance of the widget class defined above.
                     widget=CustomerContactRenderer()
-                    db_field=db_field,
+                    base_field=base_field,
                     modeladmin=self,
                     request=request,
                 )
-            return super(CaseAdmin, self).formfield_for_foreignkey(db_field, 
+            return super(CaseAdmin, self).formfield_for_foreignkey(base_field, 
                 request, **kwargs)
     """
     instances = {}
@@ -131,7 +131,7 @@ class FlexSelectWidget(Select):
     def __init__(self, db_field, modeladmin, request, *args, 
                  **kwargs):
             
-        self.db_field = db_field
+        self.base_field = db_field
         self.modeladmin = modeladmin
         self.request = request
         
@@ -146,7 +146,7 @@ class FlexSelectWidget(Select):
         """
         salted_string = "".join([
               settings.SECRET_KEY,
-              self.db_field.name, 
+              self.base_field.name, 
               self.modeladmin.__class__.__name__,         
         ])
         return hashlib.sha1(salted_string).hexdigest()
@@ -167,21 +167,21 @@ class FlexSelectWidget(Select):
     
     def _build_js(self):
         """
-        Adds the widgets hashed_name as the key with an array of its triggers
+        Adds the widgets hashed_name as the key with an array of its trigger_fields
         as the value to flexselect.selects.
         """
         return """
             <script>
                 var flexselect = flexselect || {};
-                flexselect.triggers = flexselect.triggers || {};
-                flexselect.triggers.%(field)s = flexselect.triggers.%(field)s || 
+                flexselect.trigger_fields = flexselect.trigger_fields || {};
+                flexselect.trigger_fields.%(field)s = flexselect.trigger_fields.%(field)s || 
                                                                              [];
-                flexselect.triggers.%(field)s.push(%(triggers)s);
+                flexselect.trigger_fields.%(field)s.push(%(trigger_fields)s);
             </script>""" % {
-                'field': self.db_field.name,
-                'triggers': 
+                'field': self.base_field.name,
+                'trigger_fields': 
                     ",".join('["%s", "%s"]' % (t, self.hashed_name) 
-                    for t in self.triggers),
+                    for t in self.trigger_fields),
             };
  
         

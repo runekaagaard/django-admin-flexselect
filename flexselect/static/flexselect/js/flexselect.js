@@ -4,16 +4,16 @@
 var flexselect = flexselect || {};
 
 /**
- * Binds the flexselect triggers.
+ * Binds the flexselect trigger_fields.
  */
 flexselect.bind_events = function() {
-    var triggers = that.flexselect.triggers; 
-	for (base_field in triggers) {
-		flexselect.bind_base_field(base_field, triggers[base_field][0][1]);
-		for (j in triggers[base_field])
+    var trigger_fields = that.flexselect.trigger_fields; 
+	for (base_field in trigger_fields) {
+		flexselect.bind_base_field(base_field, trigger_fields[base_field][0][1]);
+		for (j in trigger_fields[base_field])
 			flexselect.bind_trigger_field(
-				triggers[base_field][j][0], 
-				triggers[base_field][j][1], 
+				trigger_fields[base_field][j][0], 
+				trigger_fields[base_field][j][1], 
 				base_field
 			);
 	}
@@ -31,7 +31,8 @@ flexselect.bind_base_field = function(base_field, hashed_name) {
 }
 
 /**
- * Binds the change event of a field to the flexselect.trigger_field_changed function.
+ * Binds the change event of a field to the flexselect.trigger_field_changed 
+ * function.
  */
 flexselect.bind_trigger_field = function(trigger_field, hashed_name, 
 base_field) {
@@ -86,7 +87,7 @@ flexselect.move_after_plussign = function() {
 };
 
 /**
- * Overrides the original dismissAddAnotherPopup and triggers a change event
+ * Overrides the original dismissAddAnotherPopup and trigger_fields a change event
  * on field after the popup has been added.
  */
 var _dismissAddAnotherPopup = dismissAddAnotherPopup;

@@ -25,7 +25,7 @@ def catch(func):
 @login_required
 def trigger_field_changed(request):
     """
-    Ajax callback called when on of the trigger fields is changed. Returns
+    Ajax callback called when a trigger field or base field has changed. Returns
     html for new options and details for the dependent field as json.
     """
     hashed_name = request.POST.__getitem__('hashed_name')

@@ -18,7 +18,7 @@ class CompanyContactPerson(m.Model):
         return self.name
 
 class CompanyContactPersonWidget(FlexSelectWidget):
-    triggers = ['client']
+    trigger_fields = ['client']
     
     def details(self, related_instance, instance):
         return """\
