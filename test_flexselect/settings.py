@@ -145,3 +145,8 @@ LOGGING = {
         },
     }
 }
+
+# Flexselect settings.
+FLEXSELECT = {
+    'include_jquery': True,
+}

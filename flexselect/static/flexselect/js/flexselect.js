@@ -1,10 +1,77 @@
-(function(that){
+(function($, that) {
 
 // Namespace.
 var flexselect = flexselect || {};
 
-// Find which jquery version to use.
-var $ = $ || jQuery || django.jQuery || null;
+/**
+ * Binds the flexselect triggers.
+ */
+flexselect.bind_events = function() {
+    var triggers = that.flexselect.triggers; 
+	for (base_field in triggers) {
+		flexselect.bind_base_field(base_field, triggers[base_field][0][1]);
+		for (j in triggers[base_field])
+			flexselect.bind_trigger_field(
+				triggers[base_field][j][0], 
+				triggers[base_field][j][1], 
+				base_field
+			);
+	}
+};
+
+flexselect.bind_base_field = function(base_field, hashed_name) {
+	flexselect.get_element(base_field).live('change', {
+		'base_field': base_field,
+		'hashed_name': hashed_name,
+		'success': function(data) {
+			$(this).parent().find('span.flexselect_details').html(data.details);
+		},
+		'data': '&include_options=0',
+	}, flexselect.ajax);
+}
+
+/**
+ * Binds the change event of a field to the flexselect.trigger_field_changed function.
+ */
+flexselect.bind_trigger_field = function(trigger_field, hashed_name, 
+base_field) {
+	flexselect.get_element(trigger_field).live('change', {
+		'base_field': base_field,
+		'hashed_name': hashed_name,
+		'success': function(data) {
+			$(this).html(data.options);
+			$(this).parent().find('span.flexselect_details').html(data.details);
+			// If jQueryUI is installed, flash the dependent form field row.
+			if (typeof $.ui !== 'undefined') {
+				$(this).parents('.form-row').stop()
+							    .css('background-color', '#F49207')
+					            .animate({ backgroundColor: "white" }, 4000);
+			}
+	    },
+	    'data': '&include_options=1',
+	}, flexselect.ajax);
+};
+
+flexselect.ajax = function(event) {
+	$.ajax({
+		url: '/flexselect/trigger_field_changed',
+		data: $('form').serialize() + '&hashed_name=' + event.data.hashed_name
+			  + event.data.data,
+		type: 'post',
+		context: flexselect.get_element(event.data.base_field),
+		success: event.data.success,
+	    error: function(data) {
+	    	alert("Something went wrong with flexselect.");
+	    },
+	});
+}
+
+/**
+ * Returns the form element from a field name in the model.
+ */
+flexselect.get_element = function(field_name) {
+	return $('#id_' + field_name);	
+};
 
 /**
  * Moves all details fields to after the green plussign.
@@ -19,100 +86,21 @@ flexselect.move_after_plussign = function() {
 };
 
 /**
- * Returns the form element from a field name in the model.
- */
-flexselect.get_element = function(field_name) {
-	return $('#id_' + field_name);	
-};
-
-/**
- * Binds the change event of a field to the flexselect.triggered function.
- */
-flexselect.bind_field = function(field_that_triggers, hashed_name, 
-field_to_update) {
-	flexselect.get_element(field_that_triggers).live('change', {
-		'field_to_update': field_to_update,
-		'field_that_triggers': field_that_triggers,
-		'hashed_name': hashed_name,
-	}, flexselect.triggered);
-};
-
-/**
- * Binds the flexselect triggers.
- */
-flexselect.bind_events = function() {
-    var triggers = that.flexselect.triggers; 
-	for (field_to_update in triggers)
-		for (j in triggers[field_to_update])
-			flexselect.bind_field(
-				triggers[field_to_update][j][0], 
-				triggers[field_to_update][j][1], 
-				field_to_update
-			);
-};
-
-/**
- * When a trigger field is changed this function is called which queries the
- * server for updated options and details for the dependent field.
- */
-flexselect.triggered = function(event) {
-	$.ajax({
-		url: '/flexselect/update',
-		data: $('form').serialize() + '&hashed_name=' + event.data.hashed_name,
-		type: 'post',
-		context: flexselect.get_element(event.data.field_to_update),
-		success: function(data) {
-			$(this).html(data.options);
-			$(this).parent().find('span.flexselect_details').html(data.details);
-			if (typeof $.ui !== 'undefined') {
-				$(this).parent().css('background-color', '#F49207')
-					            .animate({ backgroundColor: "white" }, 5000);
-			}
-	    },
-	    error: function(data) {
-	    	alert("Something went wrong with flexselect.");
-	    },
-	});
-};
-
-/**
  * Overrides the original dismissAddAnotherPopup and triggers a change event
  * on field after the popup has been added.
  */
-function dismissAddAnotherPopup(win, newId, newRepr) {
-    // Original.
-    newId = html_unescape(newId);
-    newRepr = html_unescape(newRepr);
-    var name = windowname_to_id(win.name);
-    var elem = document.getElementById(name);
-    if (elem) {
-        if (elem.nodeName == 'SELECT') {
-            var o = new Option(newRepr, newId);
-            elem.options[elem.options.length] = o;
-            o.selected = true;
-        } else if (elem.nodeName == 'INPUT') {
-            if (elem.className.indexOf('vManyToManyRawIdAdminField') != -1 
-            && elem.value) {
-                elem.value += ',' + newId;
-            } else {
-                elem.value = newId;
-            }
-        }
-    } else {
-        var toId = name + "_to";
-        elem = document.getElementById(toId);
-        var o = new Option(newRepr, newId);
-        SelectBox.add_to_cache(toId, o);
-        SelectBox.redisplay(toId);
-    }
-    win.close();
-    // Added change event trigger.
-    $(elem).trigger('change');
-}
+var _dismissAddAnotherPopup = dismissAddAnotherPopup;
 
+dismissAddAnotherPopup = function(win, newId, newRepr) {
+	_dismissAddAnotherPopup(win, newId, newRepr);
+	$('#' + windowname_to_id(win.name)).trigger('change');
+};
+dismissAddAnotherPopup.original = _dismissAddAnotherPopup;
+
+// On Document.ready().
 $(function() {
 	flexselect.bind_events();
 	flexselect.move_after_plussign();
 });
 
-})(this);
+})(jQuery || django.jQuery, this);
