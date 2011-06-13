@@ -42,6 +42,7 @@ https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/ .
 ## Usage ##
 
 In "models.py":
+
 ```python
 from django.db import models as m
 
@@ -168,4 +169,3 @@ admin.site.register(Client, ClientAdmin)
 admin.site.register(CompanyContactPerson, CompanyContactPersonAdmin)
 admin.site.register(Company, CompanyAdmin)
 ```
-
