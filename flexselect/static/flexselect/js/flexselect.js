@@ -4,21 +4,25 @@
 var flexselect = flexselect || {};
 
 /**
- * Binds the flexselect trigger_fields.
+ * Binds base- and trigger fields.
  */
 flexselect.bind_events = function() {
-    var trigger_fields = that.flexselect.trigger_fields; 
-	for (base_field in trigger_fields) {
-		flexselect.bind_base_field(base_field, trigger_fields[base_field][0][1]);
-		for (j in trigger_fields[base_field])
-			flexselect.bind_trigger_field(
-				trigger_fields[base_field][j][0], 
-				trigger_fields[base_field][j][1], 
-				base_field
-			);
-	}
+    var fields = that.flexselect.fields;
+    for (hashed_name in fields) {
+    	field = fields[hashed_name];
+    	var base_field = field.base_field;
+    	flexselect.bind_base_field(base_field, hashed_name);
+    	for (var i in field.trigger_fields) {
+    		var trigger_field = field.trigger_fields[i]; 
+    		flexselect.bind_trigger_field(trigger_field, hashed_name, 
+    			                          base_field);
+    	}
+	} 
 };
 
+/**
+ * Binds the change event of a base field to flexselect.ajax() function.
+ */
 flexselect.bind_base_field = function(base_field, hashed_name) {
 	flexselect.get_element(base_field).live('change', {
 		'base_field': base_field,
@@ -31,8 +35,7 @@ flexselect.bind_base_field = function(base_field, hashed_name) {
 }
 
 /**
- * Binds the change event of a field to the flexselect.trigger_field_changed 
- * function.
+ * Binds the change event of a trigger field to flexselect.ajax() function.
  */
 flexselect.bind_trigger_field = function(trigger_field, hashed_name, 
 base_field) {
@@ -41,7 +44,7 @@ base_field) {
 		'hashed_name': hashed_name,
 		'success': function(data) {
 			$(this).html(data.options);
-			$(this).parent().find('span.flexselect_details').html(data.details);
+			$(this).parent().find('span.flexselect_details').html("");
 			// If jQueryUI is installed, flash the dependent form field row.
 			if (typeof $.ui !== 'undefined') {
 				$(this).parents('.form-row').stop()
@@ -53,9 +56,13 @@ base_field) {
 	}, flexselect.ajax);
 };
 
+/**
+ * Performs a ajax call that options the base field. In the event.data it needs
+ * the keys "hashed_name", "base_field", "data" and "success".
+ */
 flexselect.ajax = function(event) {
 	$.ajax({
-		url: '/flexselect/trigger_field_changed',
+		url: '/flexselect/field_changed',
 		data: $('form').serialize() + '&hashed_name=' + event.data.hashed_name
 			  + event.data.data,
 		type: 'post',

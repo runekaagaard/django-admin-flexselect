@@ -1,6 +1,7 @@
 from collections import defaultdict
 from itertools import chain
 import hashlib
+import json
 
 from django.forms.widgets import Select
 from django.utils.safestring import mark_safe
@@ -81,42 +82,6 @@ def instance_from_request(request, widget):
         return widget.base_field.model(**values)
     
 class FlexSelectWidget(Select):
-    """
-    A widget for use in the admin that makes it easy to make foreign key fields
-    depend on eachother. When you update one foreign key field, the choices
-    of one or more other foreign key fields will be updated.
-    
-    Usage example:
-        # In this example the ForeignKey field "customer_contact" will update
-        # when the ForeignKey field "client" is changed. 
-        
-        # First a widget class for the field that should update when other
-        # fields change must be defined.
-        class CustomerContactRenderer(object):
-            trigger_fields = ['client']
-            empty_choices_text = 'Please update the client field first'
-            
-            def details(self, instance):
-                return "<div>" + force_unicode(instance.client) + "</div>"
-            
-            def queryset(self, instance):
-                customer = instance.client.department.customer
-                return CustomerContact.objects.filter(customer=customer)
-                
-        # Then the formfield_for_foreignkey() method of the ModelAdmin must be
-        # overwritten. 
-        def formfield_for_foreignkey(self, base_field, request, **kwargs):
-            if base_field.name == "customer_contact":
-                kwargs['widget'] =  FlexSelectWidget(
-                    # An instance of the widget class defined above.
-                    widget=CustomerContactRenderer()
-                    base_field=base_field,
-                    modeladmin=self,
-                    request=request,
-                )
-            return super(CaseAdmin, self).formfield_for_foreignkey(base_field, 
-                request, **kwargs)
-    """
     instances = {}
     """ Instances of widgets with their hashed names as keys."""
     
@@ -149,7 +114,7 @@ class FlexSelectWidget(Select):
               self.base_field.name, 
               self.modeladmin.__class__.__name__,         
         ])
-        return hashlib.sha1(salted_string).hexdigest()
+        return "_%s" % hashlib.sha1(salted_string).hexdigest()
         
     def _get_instance(self):
         """
@@ -170,19 +135,16 @@ class FlexSelectWidget(Select):
         Adds the widgets hashed_name as the key with an array of its trigger_fields
         as the value to flexselect.selects.
         """
-        return """
+        return """\
             <script>
                 var flexselect = flexselect || {};
-                flexselect.trigger_fields = flexselect.trigger_fields || {};
-                flexselect.trigger_fields.%(field)s = flexselect.trigger_fields.%(field)s || 
-                                                                             [];
-                flexselect.trigger_fields.%(field)s.push(%(trigger_fields)s);
-            </script>""" % {
-                'field': self.base_field.name,
-                'trigger_fields': 
-                    ",".join('["%s", "%s"]' % (t, self.hashed_name) 
-                    for t in self.trigger_fields),
-            };
+                flexselect.fields = flexselect.fields || {};
+                flexselect.fields.%s = %s;
+            </script>""" % (
+                self.hashed_name, json.dumps({ 
+                  'base_field': self.base_field.name,
+                  'trigger_fields': self.trigger_fields,})
+            )
  
         
     def render(self, name, value, attrs=None, choices=(), *args, **kwargs):
@@ -206,7 +168,9 @@ class FlexSelectWidget(Select):
     
     # Methods and properties that must be implemented.
       
-    def details(self, related_instance, instance):
+    trigger_fields = []
+    
+    def details(self, base_field_instance, instance):
         raise NotImplementedError
     
     def queryset(self, instance):

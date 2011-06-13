@@ -7,23 +7,8 @@ from django.contrib.auth.decorators import login_required
 from flexselect import (FlexSelectWidget, choices_from_instance, 
                         details_from_instance, instance_from_request)
 
-import traceback
-
-def catch(func):
-    """
-    Catches any exception and prints a stack trace.
-    """
-    def wrapper(*args,**kwargs):
-        try:
-            return func(*args,**kwargs)
-        except:
-            traceback.print_exc()
-    
-    return wrapper
-
-@catch
 @login_required
-def trigger_field_changed(request):
+def field_changed(request):
     """
     Ajax callback called when a trigger field or base field has changed. Returns
     html for new options and details for the dependent field as json.
