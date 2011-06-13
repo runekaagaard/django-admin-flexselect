@@ -62,7 +62,6 @@ class CompanyContactPersonWidget(FlexSelectWidget):
     """
     The widget must extend FlexSelectWidget and implement trigger_fields, 
     details(), queryset() and empty_choices_text().
-     
     """
     
     trigger_fields = ['client']
@@ -173,5 +172,5 @@ FlexSelect requires "django.contrib.staticfiles" installed to work
 out of the box. If it is not then "jQuery", "jQueryUI" and 
 "flexselect/static/flexselect/js/flexselect.js" must be included using other
 means. Read more about "django.contrib.staticfiles" at 
-https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/ .
+https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/.
 
