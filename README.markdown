@@ -7,9 +7,10 @@ additional content of one field dynamically updates when another is changed.
 ## Usage example ##
 
 In the following we will define a Case model with two foreign key fields, the
-so called "base field" `client and the so called "trigger field" 
-`company_contact_person`. When we update the client on the Case change view we
-want to update the company_contact_person accordingly.
+so called "base field" `client` and the so called "trigger field" 
+`company_contact_person`. When we change the client on the Case change view the
+company_contact_person should update accordingly. Further more we will display
+the customer_contact_persons company and email as additional details. 
 
 In "models.py":
 
