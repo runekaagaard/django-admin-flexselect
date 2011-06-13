@@ -93,17 +93,17 @@ class FlexSelectWidget(Select):
             js.append('%s/jqueryui/1.8.13/jquery-ui.min.js' % googlecdn)
         js.append('flexselect/js/flexselect.js')
         
-    def __init__(self, db_field, modeladmin, request, *args, 
+    def __init__(self, base_field, modeladmin, request, *args, 
                  **kwargs):
             
-        self.base_field = db_field
+        self.base_field = base_field
         self.modeladmin = modeladmin
         self.request = request
         
         self.hashed_name = self._hashed_name()
         FlexSelectWidget.instances[self.hashed_name] = self
         super(FlexSelectWidget, self).__init__(*args, **kwargs)
-    
+        
     def _hashed_name(self):
         """
         Each widget will be unique by the name of the field and the class name 

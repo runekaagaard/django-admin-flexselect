@@ -63,7 +63,7 @@ class CaseAdmin(admin.ModelAdmin):
         """
         if db_field.name == "company_contact_person":
             kwargs['widget'] =  CompanyContactPersonWidget(
-                db_field=db_field,
+                base_field=db_field,
                 modeladmin=self,
                 request=request,
             )

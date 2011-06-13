@@ -1,4 +1,5 @@
 from django.db import models as m
+from django.core.exceptions import ValidationError
 
 """
 No changes to the models are needed to use flexselect.
@@ -28,6 +29,15 @@ class Client(m.Model):
 class Case(m.Model):
     client = m.ForeignKey(Client)
     company_contact_person = m.ForeignKey(CompanyContactPerson)
+    
+    def clean(self):
+        """
+        Make sure that the company for client is the same as the company for
+        the customer contact person.
+        """
+        if not self.client.company == self.company_contact_person.company:
+            raise ValidationError('The clients and the contacts company does'
+                                  ' not match.')
     
     def __unicode__(self):
         return u'Case: %d' % self.id
