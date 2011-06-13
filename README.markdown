@@ -15,6 +15,9 @@ the customer_contact_persons company and email as additional details.
 In "models.py":
 
 ```python
+from django.db import models as m
+from django.core.exceptions import ValidationError
+
 """
 No changes to the models are needed to use flexselect.
 """
