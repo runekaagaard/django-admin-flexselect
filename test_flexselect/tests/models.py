@@ -33,7 +33,7 @@ class Case(m.Model):
     def clean(self):
         """
         Make sure that the company for client is the same as the company for
-        the customer contact person.
+        the company contact person.
         """
         if not self.client.company == self.company_contact_person.company:
             raise ValidationError('The clients and the contacts company does'
