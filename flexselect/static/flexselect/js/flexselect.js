@@ -4,7 +4,7 @@
 var flexselect = flexselect || {};
 
 /**
- * Binds base- and trigger fields.
+ * Binds base and trigger fields.
  */
 flexselect.bind_events = function() {
     if (typeof that.flexselect === 'undefined') return;
@@ -22,7 +22,7 @@ flexselect.bind_events = function() {
 };
 
 /**
- * Binds the change event of a base field to flexselect.ajax() function.
+ * Binds the change event of a base field to fthe lexselect.ajax() function.
  */
 flexselect.bind_base_field = function(base_field, hashed_name) {
 	flexselect.get_element(base_field).live('change', {
@@ -36,7 +36,7 @@ flexselect.bind_base_field = function(base_field, hashed_name) {
 }
 
 /**
- * Binds the change event of a trigger field to flexselect.ajax() function.
+ * Binds the change event of a trigger field to the flexselect.ajax() function.
  */
 flexselect.bind_trigger_field = function(trigger_field, hashed_name, 
 base_field) {

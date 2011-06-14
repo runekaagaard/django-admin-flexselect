@@ -33,8 +33,8 @@ def choices_from_queryset(queryset):
 def choices_from_instance(instance, widget):
     """
     Builds choices from a model instance using the widgets queryset() method. 
-    If any of the widgets trigger_field fields is not defined on the instance or the
-    instance itself is None, None is returned.
+    If any of the widgets trigger_field fields is not defined on the instance or 
+    the instance itself is None, None is returned.
     
     instance: An instance of the model used on the current admin page.
     widget: A widget instance given to the FlexSelectWidget.
@@ -50,8 +50,8 @@ def choices_from_instance(instance, widget):
 def details_from_instance(instance, widget):
     """
     Builds html from a model instance using the widgets details() method. If
-    any of the widgets trigger_field fields is not defined on the instance or the
-    instance itself is None, None is returned.
+    any of the widgets trigger_field fields is not defined on the instance or 
+    the instance itself is None, None is returned.
     
     instance: An instance of the model used on the current admin page.
     widget: A widget instance given to the FlexSelectWidget.

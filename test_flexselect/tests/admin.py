@@ -17,7 +17,8 @@ class CompanyContactPersonWidget(FlexSelectWidget):
         """
         HTML appended to the base_field.
         
-        - related_instance: An instance of the base_field.
+        - base_field_instance: An instance of the field that this widget is
+                               applied to.
         - instance: A partial instance of the parent model loaded from the
                     request.
                     
