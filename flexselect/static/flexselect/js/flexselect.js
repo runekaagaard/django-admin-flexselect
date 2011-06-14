@@ -22,7 +22,7 @@ flexselect.bind_events = function() {
 };
 
 /**
- * Binds the change event of a base field to fthe lexselect.ajax() function.
+ * Binds the change event of a base field to the flexselect.ajax() function.
  */
 flexselect.bind_base_field = function(base_field, hashed_name) {
 	flexselect.get_element(base_field).live('change', {
