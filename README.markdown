@@ -1,18 +1,18 @@
 ## About Django Admin FlexSelect ##
 
 FlexSelect is a small app for the Django Admin that makes it trivial to have
-foreign keys depend on each other. By depend I mean that the choices and
-additional content of one field dynamically updates when another is changed.
+foreign keys depend on each other. By depend I mean that choices and additional 
+content of one field updates dynamically when another is changed.
 
 ## Usage example ##
 
 See the video at http://www.youtube.com/watch?v=ooii3iCTZ6o.
 
-In the following we will define a Case model with two foreign key fields, the
-so called "base field" `client` and the so called "trigger field" 
-`company_contact_person`. When we change the client on the Case change view the
-company_contact_person should update accordingly. Further more we will display
-the customer_contact_persons company and email as additional details. 
+In the following we will define a Case model with two foreign key fields, a 
+base field `client` and a trigger field `company_contact_person`. When we 
+change the client on the Case change view the company_contact_person updates 
+accordingly. Furthermore we will display the customer_contact_persons company 
+and email as additional details. 
 
 In "models.py":
 
@@ -51,8 +51,9 @@ class Case(m.Model):
     
     def clean(self):
         """
-        Make sure that the company for client is the same as the company for
-        the customer contact person.
+        Makes sure the company for client is the same as the company for the 
+        customer contact person. Note that you need to check for `None` too
+        if the fields are not required.
         """
         if not self.client.company == self.company_contact_person.company:
             raise ValidationError('The clients and the contacts company does'
@@ -164,7 +165,7 @@ Then copy or symlink the "flexselect" folder to your Django project.
 
 1. Add `"flexselect",` to `INSTALLED_APPS` in "settings.py".
 
-1. Add `(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
+2. Add `(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
 
 ### Options ###
 As of yet, flexselect only have one configuration option, namely 
@@ -181,8 +182,7 @@ FLEXSELECT = {
 
 ### Static files ###
 FlexSelect requires "django.contrib.staticfiles" installed to work 
-out of the box. If it is not then "jQuery", "jQueryUI" and 
-"flexselect/static/flexselect/js/flexselect.js" must be included using other
-means. Read more about "django.contrib.staticfiles" at 
+out of the box. If it is not then include "jQuery", "jQueryUI" and 
+"flexselect/static/flexselect/js/flexselect.js" manually. Read more about 
+"django.contrib.staticfiles" at 
 https://docs.djangoproject.com/en/1.3/ref/contrib/staticfiles/.
-
