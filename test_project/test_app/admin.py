@@ -1,6 +1,6 @@
 from django.contrib import admin
 from flexselect import FlexSelectWidget
-from test_flexselect.tests.models import (Company, Case, Client, 
+from test_project.test_app.models import (Company, Case, Client, 
                                           CompanyContactPerson,)
 
 class CompanyContactPersonWidget(FlexSelectWidget):

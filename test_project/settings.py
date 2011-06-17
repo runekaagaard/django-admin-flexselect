@@ -1,4 +1,4 @@
-# Django settings for test_flexselect project.
+# Django settings for tests project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'test_flexselect',                      # Or path to database file if using sqlite3.
+        'NAME': 'test_app.sql',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -83,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '@(*^1dd!vuh+@bh+z)f7_m!)p^tqv@4v6rsh1ptr49*#3xrdp8'
+SECRET_KEY = '-pj(ft8jc+t!&nx3+mupo-p(49w0(^h@xyt78)91t6t@t2xkp)'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -100,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'test_flexselect.urls'
+ROOT_URLCONF = 'test_project.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -118,7 +118,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'flexselect',
-    'tests',
+    'test_app',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -146,7 +146,6 @@ LOGGING = {
     }
 }
 
-# Flexselect settings.
 FLEXSELECT = {
     'include_jquery': True,
 }

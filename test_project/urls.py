@@ -6,8 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'test_flexselect.views.home', name='home'),
-    # url(r'^test_flexselect/', include('test_flexselect.foo.urls')),
+    # url(r'^$', 'tests.views.home', name='home'),
+    # url(r'^tests/', include('tests.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
