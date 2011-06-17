@@ -154,14 +154,10 @@ admin.site.register(Company, CompanyAdmin)
 ```
 
 ## Installation ##
-### Get it ###
-First clone the source:
+
+    sudo pip install django-admin-flexselect
     
-    git clone git@github.com:runekaagaard/django-admin-flexselect.git
-
-Then copy or symlink the "flexselect" folder to your Django project.
-
-### Configuration ###
+## Configuration ##
 
 1. Add `"flexselect",` to `INSTALLED_APPS` in "settings.py".
 

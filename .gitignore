@@ -2,3 +2,5 @@
 virtualenv
 build
 test_project/test_app.sql
+MANIFEST
+dist
