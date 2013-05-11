@@ -43,8 +43,11 @@ def choices_from_instance(instance, widget):
         for trigger_field in widget.trigger_fields:
             getattr(instance, trigger_field)
     except (ObjectDoesNotExist, AttributeError):
-        return [('', widget.empty_choices_text(instance))]
-    
+        try:
+            return choices_from_queryset(widget.default_queryset(instance))
+        except NotImplementedError:
+            return [('', widget.empty_choices_text(instance))]
+
     return choices_from_queryset(widget.queryset(instance))
     
 def details_from_instance(instance, widget):
@@ -174,6 +177,9 @@ class FlexSelectWidget(Select):
         raise NotImplementedError
     
     def queryset(self, instance):
+        raise NotImplementedError
+
+    def default_queryset(self, instance):
         raise NotImplementedError
     
     def empty_choices_text(self, instance):
