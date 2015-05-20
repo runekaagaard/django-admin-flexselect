@@ -161,7 +161,7 @@ admin.site.register(Company, CompanyAdmin)
 
 1. Add `"flexselect",` to `INSTALLED_APPS` in "settings.py".
 
-2. Add `(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
+2. Add `url(r'^flexselect/', include('flexselect.urls')),` to "urls.py".
 
 ### Options ###
 As of yet, flexselect only have one configuration option, namely 
