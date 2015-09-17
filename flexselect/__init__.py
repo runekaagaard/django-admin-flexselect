@@ -83,6 +83,8 @@ def instance_from_request(request, widget):
     
 class FlexSelectWidget(Select):
     instances = {}
+    unique_name = None
+    
     """ Instances of widgets with their hashed names as keys."""
     
     class Media:
@@ -109,12 +111,15 @@ class FlexSelectWidget(Select):
         Each widget will be unique by the name of the field and the class name 
         of the model admin.
         """
-        salted_string = "".join([
-              settings.SECRET_KEY,
-              self.base_field.name, 
-              self.modeladmin.__class__.__name__,         
-        ])
-        return "_%s" % hashlib.sha1(salted_string).hexdigest()
+        if self.unique_name is not None:
+            return self.unique_name
+        else:
+            salted_string = "".join([
+                  settings.SECRET_KEY,
+                  self.base_field.name,
+                  self.modeladmin.__class__.__name__,
+            ])
+            return "_%s" % hashlib.sha1(salted_string).hexdigest()
         
     def _get_instance(self):
         """
